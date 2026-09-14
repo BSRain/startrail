@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">星迹</string>
+    <string name="search">搜索</string>
+    <string name="settings">设置</string>
+    <string name="sky">星图</string>
+    <string name="observe">观测</string>
+    <string name="journal">记录</string>
+    <string name="time_axis">时间轴</string>
+    <string name="layers">图层</string>
+    <string name="close">关闭</string>
+</resources>

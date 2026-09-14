@@ -1,0 +1,6 @@
+# Copy this file to signing.properties and replace every placeholder.
+# signing.properties is ignored by Git. Keep the real file and keystore private.
+storeFile=C:/secure/path/startrail-release.jks
+storePassword=replace-with-keystore-password
+keyAlias=replace-with-key-alias
+keyPassword=replace-with-key-password

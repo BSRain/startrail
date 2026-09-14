@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="weather_date_time_pattern" translatable="false">MM-dd HH:mm</string>
+    <string name="weather_location_coordinates">%1$s · %2$.4f°, %3$.4f°</string>
+    <string name="weather_real_date_timezone">按真实日期安排，不使用星图模拟时间。时区：%1$s</string>
+    <string name="weather_collapse_time_settings">收起时段设置</string>
+    <string name="weather_adjust_time_location">调整时段与地点</string>
+    <string name="weather_update_phone_location">更新手机定位</string>
+    <string name="weather_today">今天</string>
+    <string name="weather_tomorrow">明天</string>
+    <string name="weather_day_after_tomorrow">后天</string>
+    <string name="weather_start_time">开始时间</string>
+    <string name="weather_end_time">结束时间</string>
+    <string name="weather_overnight_hint">结束时间早于开始时间表示跨午夜。已过去的时间自动略过。</string>
+    <string name="weather_refresh_and_generate">刷新天气并生成计划</string>
+    <string name="weather_jwt_config_button">和风天气 · JWT 配置</string>
+    <string name="weather_plan_title">天气观星计划</string>
+    <string name="weather_next_day_prefix">次日\u0020</string>
+    <string name="weather_time_range">%1$s  %2$s — %3$s%4$s</string>
+    <string name="weather_period_ended">这个时段已结束，请选择明天或调整时间。</string>
+    <string name="weather_generating">正在对齐天气、天色、月光与目标高度…</string>
+    <string name="weather_private_key_missing">未配置私钥：仅生成天文候选，天气未知。</string>
+    <string name="weather_update_failed">天气未更新：%1$s。本次仅列天文候选，未采用旧预报。</string>
+    <string name="weather_plan_failed">计划未完成，请检查配置和所选时间后重试。</string>
+    <string name="weather_error_timeout">连接超时</string>
+    <string name="weather_error_401">认证失败（401），请核对私钥、公钥凭据与手机时间</string>
+    <string name="weather_error_403">权限不足（403），请检查小时预报接口权限</string>
+    <string name="weather_error_402">账户计费限制（402），请检查服务状态</string>
+    <string name="weather_error_404">接口不可用（404），请核对 Host 和服务权限</string>
+    <string name="weather_error_429">请求达到限额（429），请稍后重试</string>
+    <string name="weather_error_generic">连接、认证、额度或数据格式检查未通过，请检查 JWT 配置及逐小时接口权限</string>
+    <string name="weather_formatted_range">%1$s — %2$s</string>
+    <string name="weather_fetched_at">和风天气 · 获取于 %1$s\n获取时间不等于预报发布时间。缺失时段或字段按未知处理。</string>
+    <string name="weather_data_source">天气数据来源 · 和风天气</string>
+    <string name="weather_rules">规则：亮目标太阳低于 −6°，深空低于 −18°，目标高度至少 20°。云量、降水和月光参与筛选；非天气预警或可见度保证。</string>
+    <string name="weather_pick_title">%1$s · %2$s</string>
+    <string name="weather_pick_details">高度 %1$.0f° · 方位 %2$.0f°\n%3$s\n%4$s</string>
+    <string name="weather_preview_time">预览这个时刻</string>
+    <string name="weather_add_to_list">加入观测清单</string>
+    <string name="weather_conditions">云量 %1$s · 降水 %2$s\n湿度 %3$s · 风速 %4$s</string>
+    <string name="weather_unknown">未知</string>
+    <string name="weather_unit_percent" translatable="false" formatted="false">%</string>
+    <string name="weather_unit_mm" translatable="false">\u0020mm</string>
+    <string name="weather_unit_kmh" translatable="false">\u0020km/h</string>
+    <string name="weather_privacy_notice">开启天气后，生成计划会将观测经纬度（两位小数）发送到和风天气。无后台定位或请求。私钥仅在本机加密保存，不进入手记备份。</string>
+    <string name="weather_api_host" translatable="false">API Host</string>
+    <string name="weather_developer_id">开发者 ID</string>
+    <string name="weather_project_id">项目 ID</string>
+    <string name="weather_credential_id">凭据 ID</string>
+    <string name="weather_key_imported">私钥已导入（不显示内容）</string>
+    <string name="weather_key_not_imported">尚未导入私钥</string>
+    <string name="weather_save_config">保存配置</string>
+    <string name="weather_config_saved">配置已保存</string>
+    <string name="weather_config_invalid">配置无效：请检查域名及各项 ID</string>
+    <string name="weather_import_key">导入 Ed25519 私钥文件</string>
+    <string name="weather_delete_key">删除本机私钥 / 关闭天气</string>
+    <string name="weather_key_deleted">私钥已删除，已关闭天气请求</string>
+    <string name="weather_delete_failed">删除未完成，请重试</string>
+    <string name="weather_permission_hint">需在和风控制台开通小时天气预报权限。本版请求未来 72 小时，实际范围受服务权限影响。先保存配置，再导入与凭据匹配的私钥。</string>
+    <string name="weather_jwt_title">和风天气 JWT</string>
+    <string name="weather_key_import_success">私钥已安全导入</string>
+    <string name="weather_key_import_failed">导入失败：请选择有效的 Ed25519 PKCS#8 私钥 PEM 文件，原私钥未改变</string>
+    <string name="weather_close">关闭</string>
+</resources>

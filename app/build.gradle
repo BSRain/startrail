@@ -1,0 +1,98 @@
+plugins {
+    id 'com.android.application'
+}
+
+def releaseSigningFile = rootProject.file('signing.properties')
+def releaseSigningProperties = new Properties()
+if (releaseSigningFile.exists()) {
+    releaseSigningFile.withInputStream { releaseSigningProperties.load(it) }
+}
+
+def releaseSigningEnvironment = [
+        storeFile    : System.getenv('STARTRAIL_RELEASE_STORE_FILE'),
+        storePassword: System.getenv('STARTRAIL_RELEASE_STORE_PASSWORD'),
+        keyAlias     : System.getenv('STARTRAIL_RELEASE_KEY_ALIAS'),
+        keyPassword  : System.getenv('STARTRAIL_RELEASE_KEY_PASSWORD')
+]
+def environmentSigningRequested = releaseSigningEnvironment.any { key, value -> value != null && !value.trim().isEmpty() }
+def releaseSigningValues = environmentSigningRequested ? releaseSigningEnvironment : [
+        storeFile    : releaseSigningProperties.getProperty('storeFile'),
+        storePassword: releaseSigningProperties.getProperty('storePassword'),
+        keyAlias     : releaseSigningProperties.getProperty('keyAlias'),
+        keyPassword  : releaseSigningProperties.getProperty('keyPassword')
+]
+def configuredReleaseSigningValues = releaseSigningValues.findAll { key, value -> value != null && !value.trim().isEmpty() }
+if (!configuredReleaseSigningValues.isEmpty() && configuredReleaseSigningValues.size() != releaseSigningValues.size()) {
+    throw new GradleException('Release signing is only partially configured. Set all four STARTRAIL_RELEASE_* variables or all four signing.properties entries.')
+}
+def releaseSigningConfigured = configuredReleaseSigningValues.size() == releaseSigningValues.size()
+if (releaseSigningConfigured && !rootProject.file(releaseSigningValues.storeFile).isFile()) {
+    throw new GradleException('The configured release keystore file does not exist.')
+}
+
+android {
+    namespace 'com.startrail.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.startrail.app'
+        minSdk 26
+        targetSdk 35
+        versionCode 13
+        versionName '4.1'
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+    }
+
+    useLibrary 'android.test.runner', false
+    useLibrary 'android.test.base', false
+
+    // Reuse this workspace's original debug certificate for in-place upgrades when available.
+    if (rootProject.file('work/signing/debug.keystore').exists()) {
+        signingConfigs.debug.storeFile = rootProject.file('work/signing/debug.keystore')
+    }
+
+    if (releaseSigningConfigured) {
+        signingConfigs {
+            release {
+                storeFile rootProject.file(releaseSigningValues.storeFile)
+                storePassword releaseSigningValues.storePassword
+                keyAlias releaseSigningValues.keyAlias
+                keyPassword releaseSigningValues.keyPassword
+            }
+        }
+    } else {
+        logger.lifecycle('StarTrail release signing is not configured; assembleRelease will produce an UNSIGNED APK (the debug key is not used).')
+    }
+
+    buildTypes {
+        release {
+            if (releaseSigningConfigured) {
+                signingConfig signingConfigs.release
+            }
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = false
+    }
+}
+
+dependencies {
+    implementation 'io.github.cosinekitty:astronomy:2.1.19'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.79'
+    // Prefer Gradle's bundled test jars so this workspace remains fully offline.
+    def bundledJunit = new File(gradle.gradleHomeDir, 'lib/junit-4.13.2.jar')
+    def bundledHamcrest = new File(gradle.gradleHomeDir, 'lib/hamcrest-core-1.3.jar')
+    if (bundledJunit.exists() && bundledHamcrest.exists()) {
+        testImplementation files(bundledJunit, bundledHamcrest)
+    } else {
+        testImplementation 'junit:junit:4.13.2'
+    }
+}

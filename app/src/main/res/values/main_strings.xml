@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- UI literals grouped by owning screen/controller. Quoting preserves intentional whitespace. -->
+    <string name="ui_context">"%1$s  /  %2$s  %3$s"</string>
+    <string name="ui_status_suffix">"%1$s%2$s"</string>
+    <string name="ui_timeline">"%1$s\n%2$s · %3$s"</string>
+    <string name="ui_completed">"已完成 %1$d / %2$d"</string>
+    <string name="ui_event_window">"%1$s — %2$s\n设备时区：%3$s"</string>
+    <string name="ui_selected_sample">"%1$s · 高度 %2$.1f°%3$s\n%4$s；实际可见度还取决于月光、天气、光污染和器材。"</string>
+    <string name="ui_catalog_count">"%1$s · %2$d 个目标 · %3$s"</string>
+    <string name="ui_favorites_summary">"%1$d 个目标 · %2$s\n%3$s"</string>
+    <string name="main_defaults_01" formatted="false">"正在等待方向传感器…"</string>
+    <string name="main_run_01" formatted="false">"已到时间范围边界（1900—2100）。"</string>
+    <string name="main_run_02" formatted="false">"北京 · 手动"</string>
+    <string name="main_run_03" formatted="false">"暂时未获取到位置，请到开阔处重试，或手动选择地点。"</string>
+    <string name="main_on_create_01" formatted="false">"背景星表加载失败，常见天体仍可使用。"</string>
+    <string name="main_on_create_02" formatted="false">"请使用手动"</string>
+    <string name="main_on_create_03" formatted="false">" · 模拟时间"</string>
+    <string name="main_on_create_04" formatted="false">"本机缺少方向传感器 · 可手动拖动浏览"</string>
+    <string name="time_live" formatted="false">"实时"</string>
+    <string name="time_simulated" formatted="false">"模拟时间"</string>
+    <string name="main_refresh_sky_time_03" formatted="false">"拖动环顾 · 双指缩放 · 点击天体"</string>
+    <string name="main_render_sky_01" formatted="false">"你的这一片星空"</string>
+    <string name="main_render_sky_02" formatted="false">"地点"</string>
+    <string name="main_render_sky_03" formatted="false">"时间"</string>
+    <string name="main_render_sky_04" formatted="false">"● 跟随手机"</string>
+    <string name="main_render_sky_05" formatted="false">"◎ 手动浏览"</string>
+    <string name="main_render_sky_06" formatted="false">"校准"</string>
+    <string name="main_render_sky_07" formatted="false">"退出全屏"</string>
+    <string name="main_render_sky_08" formatted="false">"全屏"</string>
+    <string name="main_render_sky_09" formatted="false">"寻星 · "</string>
+    <string name="main_render_sky_10" formatted="false">" · 当前天空"</string>
+    <string name="main_render_sky_11" formatted="false">" · 模拟时刻"</string>
+    <string name="main_render_sky_12" formatted="false">"结束"</string>
+    <string name="main_render_sky_13" formatted="false">"● 实时"</string>
+    <string name="main_render_sky_14" formatted="false">"回到现在"</string>
+    <string name="main_render_sky_15" formatted="false">"收起时间轴"</string>
+    <string name="main_start_guidance_01" formatted="false">"方向传感器不可用，可拖动星图按箭头寻找目标。"</string>
+    <string name="main_start_guidance_02" formatted="false">"目标现在在地平线下，可在今晚推荐中查看其他目标。"</string>
+    <string name="main_set_following_01" formatted="false">"拖动环顾天空 · 双指缩放 · 点击天体"</string>
+    <string name="main_toggle_tracking_01" formatted="false">"设备缺少可用的方向传感器，请用手动模式。"</string>
+    <string name="main_calibration_help_01" formatted="false">"先确认地点，将手机背面朝向天空。远离磁铁、金属支架与电器，缓慢画 8 字校准指南针。状态只反映系统与磁场信号，不能保证实际指向精度。"</string>
+    <string name="main_calibration_help_02" formatted="false">"方位微调\n对准已确认的亮星后，小幅调整星图方向。这里只补偿水平偏差，不代替系统校准。"</string>
+    <string name="main_calibration_help_03" formatted="false">"修正 %+.0f°"</string>
+    <string name="main_calibration_help_04" formatted="false">"方位微调，负30度到正30度"</string>
+    <string name="main_on_progress_changed_01" formatted="false">"归零"</string>
+    <string name="main_on_progress_changed_02" formatted="false">"正值使显示方位顺时针增加。微调会保存在本机；更换地点后请重新检查。不要直视太阳进行校准。"</string>
+    <string name="main_on_progress_changed_03" formatted="false">"方向校准与微调"</string>
+    <string name="save" formatted="false">"保存"</string>
+    <string name="cancel" formatted="false">"取消"</string>
+    <string name="main_render_timeline_01" formatted="false">"日期"</string>
+    <string name="main_render_timeline_02" formatted="false">"现在"</string>
+    <string name="main_render_timeline_03" formatted="false">"时间轴，拖动预览当天星空"</string>
+    <string name="main_on_progress_changed_06" formatted="false">"−1天"</string>
+    <string name="main_on_progress_changed_07" formatted="false">"倒放或暂停时间"</string>
+    <string name="main_on_progress_changed_08" formatted="false">"切换时间播放速度"</string>
+    <string name="main_on_progress_changed_09" formatted="false">"播放或暂停时间"</string>
+    <string name="main_on_progress_changed_10" formatted="false">"+1天"</string>
+    <string name="main_update_timeline_01" formatted="false">"模拟 · 已暂停"</string>
+    <string name="main_update_timeline_02" formatted="false">"模拟 · 正向"</string>
+    <string name="main_update_timeline_03" formatted="false">"模拟 · 倒放"</string>
+    <string name="main_update_timeline_04" formatted="false">"次日"</string>
+    <string name="main_update_timeline_05" formatted="false">"1分/秒"</string>
+    <string name="main_update_timeline_06" formatted="false">"10分/秒"</string>
+    <string name="main_update_timeline_07" formatted="false">"1时/秒"</string>
+    <string name="main_direction_01" formatted="false">"北"</string>
+    <string name="main_direction_02" formatted="false">"东北"</string>
+    <string name="main_direction_03" formatted="false">"东"</string>
+    <string name="main_direction_04" formatted="false">"东南"</string>
+    <string name="main_direction_05" formatted="false">"南"</string>
+    <string name="main_direction_06" formatted="false">"西南"</string>
+    <string name="main_direction_07" formatted="false">"西"</string>
+    <string name="main_direction_08" formatted="false">"西北"</string>
+    <string name="main_coordinates_01" formatted="false">"%s %.0f°  ·  高度 %.0f°  ·  %.1f 等"</string>
+    <string name="main_star_card_01" formatted="false">"较高空"</string>
+    <string name="main_star_card_02" formatted="false">"近地平线"</string>
+    <string name="main_star_card_03" formatted="false">"地平线下"</string>
+    <string name="main_star_card_04" formatted="false">"，查看详情"</string>
+    <string name="main_render_visible_01" formatted="false">"一份属于此刻的观星清单"</string>
+    <string name="main_render_visible_02" formatted="false">"现在，看什么"</string>
+    <string name="main_render_visible_03" formatted="false">"☁ 天气观星计划"</string>
+    <string name="main_render_visible_04" formatted="false">"★ 我的收藏 · "</string>
+    <string name="main_render_visible_05" formatted="false">" 个目标"</string>
+    <string name="main_render_visible_06" formatted="false">"◎ 深空目录 · "</string>
+    <string name="main_render_visible_07" formatted="false">"☑ 我的观测清单"</string>
+    <string name="main_render_visible_08" formatted="false">"先选适合的时段，再让手机带你找星"</string>
+    <string name="main_render_visible_09" formatted="false">"更换地点"</string>
+    <string name="main_render_visible_10" formatted="false">"调整时间"</string>
+    <string name="main_render_visible_11" formatted="false">"地平线以上 ≠ 肉眼一定可见"</string>
+    <string name="main_render_visible_12" formatted="false">"下方完整清单只按是否升起筛选，白天也会列出恒星。实际观测还取决于天色、天气与光污染。"</string>
+    <string name="main_render_visible_13" formatted="false">"当前地平线上方 · "</string>
+    <string name="main_render_visible_14" formatted="false">"此时此地没有收录的亮星位于地平线以上，请更改时间或地点。"</string>
+    <string name="main_load_tonight_01" formatted="false">"今晚推荐"</string>
+    <string name="main_load_tonight_02" formatted="false">"正在计算当地夜间与适合的目标…"</string>
+    <string name="main_load_tonight_03" formatted="false">"\n设备时区 "</string>
+    <string name="main_load_tonight_04" formatted="false">" · 地点 "</string>
+    <string name="main_load_tonight_05" formatted="false">"月球"</string>
+    <string name="main_load_tonight_06" formatted="false">"行星"</string>
+    <string name="main_load_tonight_07" formatted="false">"深空"</string>
+    <string name="main_load_tonight_08" formatted="false">"亮星"</string>
+    <string name="main_load_tonight_09" formatted="false">"\n推荐约 "</string>
+    <string name="main_load_tonight_10" formatted="false">" · 高度 %.0f°"</string>
+    <string name="main_load_tonight_11" formatted="false">"查看时段与寻星  ›"</string>
+    <string name="main_load_tonight_12" formatted="false">"，查看时段与寻星"</string>
+    <string name="main_load_tonight_13" formatted="false">"深空要求太阳低于 −18°，其他目标低于 −6°，目标高度至少20°。每 "</string>
+    <string name="main_load_tonight_14" formatted="false">" 分钟取样；时段边界为近似值。月光提示依据推荐时刻的月相与高度，不是可见度预测；未包含天气或光污染。"</string>
+    <string name="main_load_tonight_15" formatted="false">"暂时无法计算推荐，可继续查看下方天体清单。"</string>
+    <string name="main_observing_window_01" formatted="false">"短暂候选时刻约 "</string>
+    <string name="main_observing_window_02" formatted="false">"适合时段约 "</string>
+    <string name="main_show_recommendation_01" formatted="false">"高度曲线与升落时刻"</string>
+    <string name="main_show_recommendation_02" formatted="false">"加入观测清单"</string>
+    <string name="main_show_recommendation_03" formatted="false">" · 观测建议"</string>
+    <string name="main_show_recommendation_04" formatted="false">"\n推荐时刻约 "</string>
+    <string name="main_show_recommendation_05" formatted="false">"\n\n预览会切换到推荐时刻；现在寻星会使用当前真实天空，目标可能尚未升起。"</string>
+    <string name="guide_now" formatted="false">"现在寻星"</string>
+    <string name="main_show_recommendation_07" formatted="false">"预览该时刻"</string>
+    <string name="main_add_to_observing_list_01" formatted="false">"已加入观测清单，重复添加不会重置完成状态。"</string>
+    <string name="main_show_observing_list_01" formatted="false">"为这次观测挑选目标，逐项标记完成。清单跨日期保留，完成状态由你手动管理；不会自动生成手记。"</string>
+    <string name="main_show_observing_list_02" formatted="false">"我的观测清单"</string>
+    <string name="main_show_observing_list_03" formatted="false">"还没有目标。可从天体详情或今晚推荐加入。"</string>
+    <string name="main_show_observing_list_04" formatted="false">"观测时段"</string>
+    <string name="main_show_observing_list_05" formatted="false">"详情"</string>
+    <string name="remove" formatted="false">"移除"</string>
+    <string name="main_show_observing_list_07" formatted="false">"清单暂时无法读取"</string>
+    <string name="main_event_time_01" formatted="false">"本窗口无此事件"</string>
+    <string name="main_event_time_02" formatted="false">"约 "</string>
+    <string name="main_show_observing_profile_01" formatted="false">"正在计算未来24小时的高度与事件…"</string>
+    <string name="main_show_observing_profile_02" formatted="false">" · 观测时段"</string>
+    <string name="main_show_observing_profile_03" formatted="false">"升起（中心0°）  "</string>
+    <string name="main_show_observing_profile_04" formatted="false">"\n上中天  "</string>
+    <string name="main_show_observing_profile_05" formatted="false">" · 高度 %.1f°"</string>
+    <string name="main_show_observing_profile_06" formatted="false">"\n落下（中心0°）  "</string>
+    <string name="main_show_observing_profile_07" formatted="false">"升落采用几何中心穿过0°，不含折射、日月边缘、地形遮挡，和常见日出日落预报有差别。列出本窗口内首次事件；无事件可能是始终在地平线上/下或未跨过事件时刻。"</string>
+    <string name="main_show_observing_profile_08" formatted="false">"背景：亮色为白天/暮光，深色为太阳低于−18°的暗夜。曲线包含地平线下的部分。"</string>
+    <string name="main_show_observing_profile_09" formatted="false">"选择高度曲线时刻"</string>
+    <string name="main_show_observing_profile_10" formatted="false">" · 地平线下"</string>
+    <string name="main_show_observing_profile_11" formatted="false">" · 地平线上方"</string>
+    <string name="astronomical_darkness" formatted="false">"暗夜"</string>
+    <string name="twilight" formatted="false">"暮光"</string>
+    <string name="main_show_observing_profile_14" formatted="false">"白天或较亮暮光"</string>
+    <string name="main_on_stop_tracking_touch_01" formatted="false">"预览选中时刻"</string>
+    <string name="main_on_stop_tracking_touch_02" formatted="false">"暂时无法计算，请关闭后重试。"</string>
+    <string name="main_details_01" formatted="false">"\n也叫："</string>
+    <string name="main_details_02" formatted="false">"当前位于地平线上方；实际观测取决于天色、天气与周边环境。"</string>
+    <string name="main_details_03" formatted="false">"当前位于地平线下，仍可在星图中浏览和点击；实际天空中无法直接观测。"</string>
+    <string name="main_details_04" formatted="false">"这是一颗位于"</string>
+    <string name="main_details_05" formatted="false">"方向的恒星。视星等数值越小，表示从地球看起来越亮。"</string>
+    <string name="main_details_06" formatted="false">"\n综合视星等 %.1f · 参考长轴约 %.1f 角分"</string>
+    <string name="main_details_07" formatted="false">"\n综合星等是整个目标的总亮度，不能按同星等恒星判断是否容易看见。星图符号是位置标记，不是照片或真实视大小。"</string>
+    <string name="main_details_08" formatted="false">"距观测者约 %,.0f 千米\n照亮比例 %.1f%% · 实际角直径 %.3f°\n图中天体大小经过放大，方便辨认。"</string>
+    <string name="main_details_09" formatted="false">"不要直视太阳，也不要通过未配专用太阳滤镜的光学器材观测。"</string>
+    <string name="main_details_10" formatted="false">"星表坐标 J2000\n赤经 %.4f h   /   赤纬 %+.4f°"</string>
+    <string name="main_details_11" formatted="false">"记录这次观测"</string>
+    <string name="main_details_12" formatted="false">"★ 已收藏 · 点击取消"</string>
+    <string name="main_details_13" formatted="false">"☆ 收藏这个目标"</string>
+    <string name="main_details_14" formatted="false">"已加入我的收藏。"</string>
+    <string name="main_details_15" formatted="false">"已取消收藏。"</string>
+    <string name="main_details_16" formatted="false">"查看太阳位置"</string>
+    <string name="start_guidance" formatted="false">"开始寻星"</string>
+    <string name="main_details_18" formatted="false">"在星图查看"</string>
+    <string name="main_details_19" formatted="false">"已显示地平线下目标；这是星图浏览，实际天空中不可见。"</string>
+    <string name="main_search_01" formatted="false">"天体名称、星座或编号，如 M31"</string>
+    <string name="main_search_02" formatted="false">"★ 我的收藏"</string>
+    <string name="main_search_03" formatted="false">"深空目录"</string>
+    <string name="main_search_04" formatted="false">"寻找一颗星"</string>
+    <string name="main_search_05" formatted="false">"地平线上方"</string>
+    <string name="main_search_06" formatted="false">"未找到匹配项，请尝试其他名称。"</string>
+    <string name="main_search_07" formatted="false">"找到 "</string>
+    <string name="main_search_08" formatted="false">" 个 · 常见天体目录"</string>
+    <string name="main_choose_time_01" formatted="false">"当前："</string>
+    <string name="main_choose_time_02" formatted="false">"\n所有时间使用设备时区："</string>
+    <string name="main_choose_time_03" formatted="false">"\n切换城市不会改变时间所代表的瞬间。"</string>
+    <string name="main_choose_time_04" formatted="false">"漫游时间"</string>
+    <string name="main_choose_time_05" formatted="false">"选择日期与时间"</string>
+    <string name="main_choose_time_06" formatted="false">"回到当前时间"</string>
+    <string name="main_choose_location_01" formatted="false">"定位当前位置"</string>
+    <string name="main_choose_location_02" formatted="false">"北京"</string>
+    <string name="main_choose_location_03" formatted="false">"上海"</string>
+    <string name="main_choose_location_04" formatted="false">"香港"</string>
+    <string name="main_choose_location_05" formatted="false">"拉萨"</string>
+    <string name="main_choose_location_06" formatted="false">"乌鲁木齐"</string>
+    <string name="main_choose_location_07" formatted="false">"悉尼"</string>
+    <string name="main_choose_location_08" formatted="false">"伦敦"</string>
+    <string name="main_choose_location_09" formatted="false">"手动输入经纬度"</string>
+    <string name="main_choose_location_10" formatted="false">"观测地点 · "</string>
+    <string name="main_choose_location_11" formatted="false">" · 手动"</string>
+    <string name="main_manual_location_01" formatted="false">"北纬、东经为正，南纬、西经为负。"</string>
+    <string name="main_manual_location_02" formatted="false">"地点名称"</string>
+    <string name="main_manual_location_03" formatted="false">"自定义地点"</string>
+    <string name="main_manual_location_04" formatted="false">"纬度 −90～90"</string>
+    <string name="main_manual_location_05" formatted="false">"经度 −180～180"</string>
+    <string name="main_manual_location_06" formatted="false">"手动设置地点"</string>
+    <string name="apply" formatted="false">"应用"</string>
+    <string name="main_manual_location_08" formatted="false">"请输入有效经纬度：纬度 −90～90，经度 −180～180。"</string>
+    <string name="main_locate_01" formatted="false">"此设备没有定位服务，请手动设置地点。"</string>
+    <string name="main_on_provider_disabled_01" formatted="false">"系统定位未开启或不可用，请开启定位后重试，或手动选择地点。"</string>
+    <string name="main_on_provider_disabled_02" formatted="false">"正在获取位置，最多等待 20 秒…"</string>
+    <string name="main_on_provider_disabled_03" formatted="false">"未获得定位权限，仍可手动选择地点。"</string>
+    <string name="main_accept_location_01" formatted="false">"定位 %.2f°, %.2f°"</string>
+    <string name="main_accept_location_02" formatted="false">"已更新观测地点。"</string>
+    <string name="main_on_request_permissions_result_01" formatted="false">"未授权定位，你仍可手动选择城市或输入经纬度。"</string>
+    <string name="main_render_journal_01" formatted="false">"把与星空的相遇，留在这里"</string>
+    <string name="main_render_journal_02" formatted="false">"我的观星手记"</string>
+    <string name="main_render_journal_03" formatted="false">"保存在本机 · 可导出备份 · 时间使用设备时区"</string>
+    <string name="main_render_journal_04" formatted="false">"导出手记"</string>
+    <string name="main_render_journal_05" formatted="false">"恢复手记"</string>
+    <string name="main_render_journal_06" formatted="false">"JSON 备份包含手记、时间与地点；不包含收藏和设置。"</string>
+    <string name="main_render_journal_07" formatted="false">"＋  新建观测记录"</string>
+    <string name="main_render_journal_08" formatted="false">"第一颗星，值得记住"</string>
+    <string name="main_render_journal_09" formatted="false">"在星图中选择一个目标，记录看到它的时间、地点和心情。也可以直接新建手记。"</string>
+    <string name="main_render_journal_10" formatted="false">" 次星空相遇"</string>
+    <string name="main_render_journal_11" formatted="false">"这次相遇还没有文字。"</string>
+    <string name="main_view_entry_01" formatted="false">"暂无笔记"</string>
+    <string name="main_view_entry_02" formatted="false">"编辑"</string>
+    <string name="main_view_entry_03" formatted="false">"删除"</string>
+    <string name="main_view_entry_04" formatted="false">"删除这条记录？"</string>
+    <string name="main_view_entry_05" formatted="false">"删除后无法恢复。"</string>
+    <string name="main_edit_entry_01" formatted="false">"\n本条记录使用星图的模拟时间。"</string>
+    <string name="main_edit_entry_02" formatted="false">"观测目标，如：织女星"</string>
+    <string name="main_edit_entry_03" formatted="false">"看到了什么？天空如何？写下这一刻…"</string>
+    <string name="main_edit_entry_04" formatted="false">"记录一次星空相遇"</string>
+    <string name="main_edit_entry_05" formatted="false">"编辑手记"</string>
+    <string name="main_edit_entry_06" formatted="false">"请填写观测目标"</string>
+    <string name="main_edit_entry_07" formatted="false">"目标名称请控制在 80 字内"</string>
+    <string name="main_edit_entry_08" formatted="false">"笔记请控制在 5000 字内"</string>
+    <string name="main_edit_entry_09" formatted="false">"已保存到本机。"</string>
+    <string name="catalog_get_string_01" formatted="false">"星团、星云与星系 · 按所选地点和时间显示高度。暗夜、光污染与器材都会影响实际可见性。"</string>
+    <string name="catalog_get_string_02" formatted="false">"全部"</string>
+    <string name="catalog_get_string_03" formatted="false">"星系"</string>
+    <string name="catalog_get_string_04" formatted="false">"星团"</string>
+    <string name="catalog_get_string_05" formatted="false">"星云"</string>
+    <string name="time_simulated_instant" formatted="false">"模拟时刻"</string>
+    <string name="catalog_get_string_07" formatted="false">"我的收藏"</string>
+    <string name="catalog_get_string_08" formatted="false">"当前天空"</string>
+    <string name="catalog_get_string_09" formatted="false">"还没有收藏。搜索或点击星图中的天体，在详情里选择收藏。"</string>
+    <string name="catalog_get_string_10" formatted="false">"未收录目标 · "</string>
+    <string name="main_settings_01" formatted="false">"深空天体符号"</string>
+    <string name="main_settings_02" formatted="false">"银河背景"</string>
+    <string name="main_settings_03" formatted="false">"星座插画 · 7 组"</string>
+    <string name="main_settings_04" formatted="false">"方位网格"</string>
+    <string name="main_settings_05" formatted="false">"星座连线"</string>
+    <string name="main_settings_06" formatted="false">"星体名称"</string>
+    <string name="main_settings_07" formatted="false">"红色夜间模式"</string>
+    <string name="main_settings_08" formatted="false">"观测地点\n"</string>
+    <string name="main_settings_09" formatted="false">"\n\n时间时区\n"</string>
+    <string name="main_settings_10" formatted="false">"\n\n离线天体\n83 颗具名恒星 + 9 个太阳系天体\n"</string>
+    <string name="main_settings_11" formatted="false">" 个深空天体\n"</string>
+    <string name="main_settings_12" formatted="false">" 条背景恒星数据 · 星图离线，天气可选联网"</string>
+    <string name="main_settings_13" formatted="false">"使用说明与数据来源"</string>
+    <string name="main_settings_14" formatted="false">"星图设置"</string>
+    <string name="transfer_toast_01" formatted="false">"正在处理文件，请稍候。"</string>
+    <string name="transfer_toast_02" formatted="false">"设备没有可用的文件选择器。"</string>
+    <string name="transfer_toast_03" formatted="false">"正在处理另一份文件，请稍后重试。"</string>
+    <string name="transfer_toast_04" formatted="false">"正在导出手记…"</string>
+    <string name="transfer_toast_05" formatted="false">"无法打开文件"</string>
+    <string name="transfer_toast_06" formatted="false">"已导出 "</string>
+    <string name="transfer_toast_07" formatted="false">" 条手记。"</string>
+    <string name="transfer_toast_08" formatted="false">"导出失败，请检查文件位置和存储空间。本机记录未改变。"</string>
+    <string name="transfer_toast_09" formatted="false">"正在检查备份…"</string>
+    <string name="transfer_toast_10" formatted="false">"无法恢复：文件不是有效的星迹手记备份，或超过 2 MiB / 2000 条限制。本机记录未改变。"</string>
+    <string name="transfer_preview_restore_01" formatted="false">"恢复观星手记"</string>
+    <string name="transfer_preview_restore_02" formatted="false">"备份包含 "</string>
+    <string name="transfer_preview_restore_03" formatted="false">" 条手记，预计新增 "</string>
+    <string name="transfer_preview_restore_04" formatted="false">" 条。\n相同记录 ID 保留本机版本，重复导入不会增加副本。\n\n只恢复手记，不改变地点设置、收藏和星图图层。"</string>
+    <string name="transfer_preview_restore_05" formatted="false">"合并恢复"</string>
+    <string name="transfer_preview_restore_06" formatted="false">"恢复完成，新增 "</string>
+    <string name="transfer_preview_restore_07" formatted="false">"恢复未完成："</string>
+    <string name="info_defaults_01" formatted="false">"星迹 4.1 · 工程整理\n让手机朝向，成为探索星空的方向。"</string>
+    <string name="info_defaults_02" formatted="false">"深空探索\n观测页和搜索页可以打开深空目录，按星系、星团、星云筛选。天体详情包含综合星等、角尺寸及器材建议。符号表示位置，不是照片或真实大小；地平线下同样可以浏览。图层设置可以隐藏普通深空符号，但正在选择或寻星的目标仍会显示。\n\n收藏与备份\n天体详情可加入收藏，在搜索或观测页打开收藏列表。记录页可以导出 JSON 手记备份，恢复时只增加新记录，相同 ID 保留本机版本。备份仅包含手记，不包含收藏、观测清单和设置，文件里含观测地点及笔记。\n\n时间轴与图层\n点击底部时间轴：拖动浏览当天，正向/倒放，切换 1分、10分、1小时每秒；点现在返回实时。日期支持 1900—2100。后台与弹窗会暂停播放。\n银河按真实银道方向绘制，为艺术化亮度；7 组原创星座插画固定在对应天区，不代表星体边界。图层可独立关闭。\n\n怎么使用\n1. 确认地点；默认北京是手动示例地点。\n2. 开启跟随手机，将手机背面指向天空。图像会响应手机的转向、俯仰和侧倾。\n3. 拖动可切换手动环顾，双指可缩放；朝北按钮恢复水平参考方向。\n4. 搜索天体，点“开始寻星”跟随箭头转动手机；此功能会回到当前真实时间。点“在星图查看”可直接跳到目标方向。\n5. 全屏可扩大星图；观测页有当前夜间或下一个夜间的推荐。\n\n真实位置与显示\n高度表示高出地平线的角度，方位从真北顺时针计算。星图同时显示地平线上下的天体，下半球以淡色区域区分；显示不代表实际可见。太阳、月球及行星按时间与地点计算，月球含观测地点视差和月相。日月、行星图标适当放大，便于手机上辨认。背景恒星并非随机装饰。\n\n方向校准\n陀螺仪与磁力、重力传感器共同确定方向；磁场干扰会造成偏移。请远离磁性物体、画 8 字校准；不支持的设备仍可手动查看。\n\n数据来源\n太阳系：Astronomy Engine 2.1.19，Don Cross，MIT 许可。\n背景恒星：HYG Database v4.1，David Nash / astronexus，CC BY-SA 4.0。本版提取亮度不暗于 5.5 等的条目并减少字段；派生 CSV 同样按 CC BY-SA 4.0 提供。\n源码与许可：https://github.com/astronexus/HYG-Database\nhttps://creativecommons.org/licenses/by-sa/4.0/\n\n边界与隐私\n此处为透视投影的 3D 天球，不含相机画面或地形遮挡。天气计划采用可选的和风预报。不用于望远镜精密指向。星图与传感器在本机计算，笔记在本机保存；配置天气后，生成计划会向和风发送两位小数的观测经纬度。不可直视太阳。"</string>
+    <string name="info_defaults_03" formatted="false">"关于星迹"</string>
+    <string name="info_defaults_04" formatted="false">"开源许可"</string>
+    <string name="info_defaults_05" formatted="false">"知道了"</string>
+    <string name="info_licenses_01" formatted="false">"许可文本读取失败，请查看源码中的 THIRD-PARTY-NOTICES.txt。"</string>
+</resources>

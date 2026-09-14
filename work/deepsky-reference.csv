@@ -1,0 +1,15 @@
+AppId,Name,Type,RA,Dec,MajAx,MinAx,B-Mag,V-Mag,M,Common names
+m31,NGC0224,G,00:42:44.35,+41:16:08.6,177.83,69.66,4.29,3.44,031,Andromeda Galaxy
+m33,NGC0598,G,01:33:50.89,+30:39:36.8,62.09,36.73,6.35,5.79,033,"Triangulum Galaxy,Triangulum Pinwheel"
+m42,NGC1976,Cl+N,05:35:16.48,-05:23:22.8,90.00,60.00,4.00,4.00,042,"Great Orion Nebula,Orion Nebula"
+m45,Mel022,OCl,03:47:28.6,+24:06:19,150.00,150.00,,1.20,045,Pleiades
+m44,NGC2632,OCl,08:40:22.20,+19:40:19.4,108.60,,3.46,3.10,044,"Beehive,Praesepe Cluster"
+m13,NGC6205,GCl,16:41:41.63,+36:27:40.7,16.50,,,5.80,013,Hercules Globular Cluster
+m22,NGC6656,GCl,18:36:24.20,-23:54:12.3,12.60,,7.16,6.17,022,
+omega_cen,NGC5139,GCl,13:26:45.89,-47:28:36.7,27.00,,6.12,5.33,,Omega Centauri
+m57,NGC6720,PN,18:53:35.01,+33:01:42.9,1.27,,9.70,8.80,057,Ring Nebula
+m27,NGC6853,PN,19:59:36.38,+22:43:15.7,6.70,,7.60,7.40,027,Dumbbell Nebula
+m8,NGC6523,Neb,18:03:41.27,-24:22:48.6,45.00,30.00,5.00,5.80,008,Lagoon Nebula
+m20,NGC6514,Neb,18:02:42.11,-22:58:18.8,28.00,28.00,6.30,8.50,020,Trifid Nebula
+m51,NGC5194,G,13:29:52.71,+47:11:42.6,13.71,11.67,8.61,8.36,051,Whirlpool Galaxy
+m81,NGC3031,G,09:55:33.17,+69:03:55.1,21.63,11.25,7.79,6.92,081,Bode's Galaxy
