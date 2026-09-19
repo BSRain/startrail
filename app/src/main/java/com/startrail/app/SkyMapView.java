@@ -30,7 +30,7 @@ public final class SkyMapView extends View {
     private final Map<String,String> displayNames=new HashMap<>();
     private final List<Star> labelCandidates=new ArrayList<>();
     private final List<double[]> equatorialBackdrop=new ArrayList<>();
-    private final Path groundPath=new Path(), linePath=new Path();
+    private final Path groundPath=new Path(), linePath=new Path(), moonPhasePath=new Path();
     private final float[] groundX=new float[8],groundY=new float[8];
     private LinearGradient skyGradient,hudGradient;
     private int gradientHeight=-1,gradientMode=-1;
@@ -60,6 +60,9 @@ public final class SkyMapView extends View {
     private double sceneLatitude,motionOffsetSeconds;
     private long motionStarted;
     private static final long MOTION_DURATION_MS=120;
+    private static final int[] SUN_GLOW={0x9affc56d,0x40eb9c46,0x00eb9c46};
+    private static final int[] RED_SUN_GLOW={0x65c64662,0x20a8324b,0x00a8324b};
+    private static final float[] SUN_GLOW_STOPS={0f,.38f,1f};
 
     void setPlaybackMotion(boolean enabled){
         playbackMotion=enabled;
@@ -102,6 +105,10 @@ public final class SkyMapView extends View {
     public Star getGuidanceTarget(){return guidanceTarget;}
     public void setLayers(boolean lines,boolean labels){showLines=lines;showLabels=labels;invalidate();}
     public void setDecorations(boolean galaxy,boolean art,boolean grid){showGalaxy=galaxy;showArtwork=art;showGrid=grid;invalidate();}
+    /** Adjusts decorative layers independently of the sky objects. */
+    public void setDecorationOpacity(float galaxyOpacity,float artworkOpacity){
+        galaxy.setOpacity(galaxyOpacity);artwork.setOpacity(artworkOpacity);invalidate();
+    }
     public void setRedMode(boolean enabled){redMode=enabled;invalidate();}
     public void setDeepSkyVisible(boolean enabled){showDeepSky=enabled;invalidate();}
     public float getChartRotation(){return (float)azimuth;}
@@ -178,7 +185,7 @@ public final class SkyMapView extends View {
             String name=star.chineseName.isEmpty()?star.name:star.chineseName;
             if(deep!=null)name=(star.id.equals("omega_cen")?"NGC 5139":star.id.toUpperCase(Locale.ROOT))+" "+name;
             displayNames.put(star.id,name);
-            if(star.magnitude<2.8||scene.solar.containsKey(star.id)||deep!=null)labelCandidates.add(star);
+            labelCandidates.add(star);
         }
         labelCandidates.sort(Comparator.comparingDouble(star->scene.solar.containsKey(star.id)?-20:star.magnitude));
         while(labelPool.size()<stars.size()+2)labelPool.add(new RectF());
@@ -248,13 +255,19 @@ public final class SkyMapView extends View {
             label(canvas,guidanceTarget,hits.get(guidanceTarget.id),true);
         if(showLabels){
             for(Star star:labelCandidates){
-                if((selected==null||!star.id.equals(selected.id))&&(guidanceTarget==null||!star.id.equals(guidanceTarget.id))&&hits.containsKey(star.id))label(canvas,star,hits.get(star.id),false);
+                if((selected==null||!star.id.equals(selected.id))&&(guidanceTarget==null||!star.id.equals(guidanceTarget.id))&&hits.containsKey(star.id)&&eligibleLabel(star))label(canvas,star,hits.get(star.id),false);
             }
         }
         frame=physicalFrame;
         drawGuidance(canvas);
         drawHud(canvas,day);
         if(playbackMotion&&motionOffset!=0)postInvalidateOnAnimation();
+    }
+    private boolean eligibleLabel(Star star){
+        if(scene.solar.containsKey(star.id))return true;
+        if(deepEntries.containsKey(star.id))return showDeepSky&&(fov<65||star.magnitude<=1.25);
+        double limit=fov>=85?1.25:fov>=65?2.0:fov>=45?2.8:fov>=32?3.8:5.0;
+        return star.magnitude<=limit;
     }
     private void drawGrid(Canvas canvas){
         paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(dp(.7f));color(0x333f7193,0x405d2638);
@@ -297,24 +310,38 @@ public final class SkyMapView extends View {
         paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(dp(1.3f));color(0xff50796f,0xff853749);polyline(canvas,0,true);paint.setStyle(Paint.Style.FILL);
     }
     private void drawBody(Canvas canvas,SolarSystem.BodyPosition body,float x,float y){
-        float radius=dp(body.id.equals("sun")?13:body.id.equals("moon")?13:body.id.equals("jupiter")?7:5);
-        int tint=body.id.equals("sun")?0xffffd378:body.id.equals("mars")?0xffdf9678:body.id.equals("venus")?0xffffe6b4:body.id.equals("jupiter")?0xffd7b593:body.id.equals("saturn")?0xffdcc99b:body.id.equals("uranus")?0xff8ccdd2:body.id.equals("neptune")?0xff6b9ce4:0xffccd4dc;
+        boolean sun=body.id.equals("sun"),moon=body.id.equals("moon");
+        float radius=dp(sun||moon?13:body.id.equals("jupiter")?7:5);
+        int tint=sun?0xffffd378:body.id.equals("mars")?0xffdf9678:body.id.equals("venus")?0xffffe6b4:body.id.equals("jupiter")?0xffd7b593:body.id.equals("saturn")?0xffdcc99b:body.id.equals("uranus")?0xff8ccdd2:body.id.equals("neptune")?0xff6b9ce4:0xffccd4dc;
         if(redMode)tint=0xffd76d83;
-        if(body.id.equals("sun")){
-            paint.setShader(new RadialGradient(x,y,radius*3,new int[]{0x70ffcf74,0x00ffcf74},null,Shader.TileMode.CLAMP));canvas.drawCircle(x,y,radius*3,paint);paint.setShader(null);
+        if(sun){
+            paint.setShader(new RadialGradient(x,y,radius*3.6f,
+                    redMode?RED_SUN_GLOW:SUN_GLOW,
+                    SUN_GLOW_STOPS,Shader.TileMode.CLAMP));
+            canvas.drawCircle(x,y,radius*3.6f,paint);paint.setShader(null);
+            paint.setColor(redMode?0x66e07086:0x80ffcb70);canvas.drawCircle(x,y,radius*1.24f,paint);
         }
         if(body.id.equals("saturn")){paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(dp(2));paint.setColor(tint);canvas.save();canvas.rotate(-25,x,y);canvas.drawOval(x-radius*1.9f,y-radius*.55f,x+radius*1.9f,y+radius*.55f,paint);canvas.restore();paint.setStyle(Paint.Style.FILL);}
-        paint.setShader(new RadialGradient(x-radius*.35f,y-radius*.35f,radius*1.8f,new int[]{tint,redMode?0xff532232:0xff344555},null,Shader.TileMode.CLAMP));canvas.drawCircle(x,y,radius,paint);paint.setShader(null);
-        if(body.id.equals("moon")){
-            color(0xff263445,0xff381725);canvas.drawCircle(x,y,radius,paint);
-            double[] sun=vectors.get("sun"),moon=vectors.get("moon");double rotation=0;
-            if(sun!=null&&moon!=null){double along=dot(sun,moon);double[] tangent={sun[0]-along*moon[0],sun[1]-along*moon[1],sun[2]-along*moon[2]};rotation=Math.toDegrees(Math.atan2(-dot(tangent,frame.up),dot(tangent,frame.right)));}
+        if(moon){
+            paint.setColor(redMode?0xff35151f:0xff283543);canvas.drawCircle(x,y,radius,paint);
+            paint.setColor(redMode?0x546a3a47:0x668d9ca5);canvas.drawCircle(x-radius*.2f,y-radius*.25f,radius*.68f,paint);
+            double[] sunVector=vectors.get("sun"),moonVector=vectors.get("moon");double rotation=0;
+            if(sunVector!=null&&moonVector!=null){
+                double along=dot(sunVector,moonVector);
+                double right=sunVector[0]*frame.right[0]+sunVector[1]*frame.right[1]+sunVector[2]*frame.right[2]-along*dot(moonVector,frame.right);
+                double up=sunVector[0]*frame.up[0]+sunVector[1]*frame.up[1]+sunVector[2]*frame.up[2]-along*dot(moonVector,frame.up);
+                rotation=Math.toDegrees(Math.atan2(-up,right));
+            }
             canvas.save();canvas.rotate((float)rotation,x,y);
-            Path phase=new Path();phase.moveTo(x,y-radius);
-            for(int i=-90;i<=90;i+=5){double a=Math.toRadians(i);phase.lineTo(x+(float)Math.cos(a)*radius,y+(float)Math.sin(a)*radius);}
-            for(int i=90;i>=-90;i-=5){double a=Math.toRadians(i);phase.lineTo(x+(float)((1-2*body.illumination)*Math.cos(a))*radius,y+(float)Math.sin(a)*radius);}
-            phase.close();color(0xffe6e9da,0xffe5a0ad);canvas.drawPath(phase,paint);canvas.restore();
+            moonPhasePath.rewind();moonPhasePath.moveTo(x,y-radius);
+            for(int i=-90;i<=90;i+=5){double angle=Math.toRadians(i);moonPhasePath.lineTo(x+(float)Math.cos(angle)*radius,y+(float)Math.sin(angle)*radius);}
+            for(int i=90;i>=-90;i-=5){double angle=Math.toRadians(i);moonPhasePath.lineTo(x+(float)((1-2*body.illumination)*Math.cos(angle))*radius,y+(float)Math.sin(angle)*radius);}
+            moonPhasePath.close();paint.setColor(redMode?0xffd68b9c:0xffe5e8de);canvas.drawPath(moonPhasePath,paint);
+            paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(dp(.7f));paint.setColor(redMode?0x80ffb6c0:0x80ffffff);canvas.drawPath(moonPhasePath,paint);paint.setStyle(Paint.Style.FILL);
+            canvas.restore();return;
         }
+        paint.setShader(new RadialGradient(x-radius*.35f,y-radius*.35f,radius*1.8f,new int[]{tint,redMode?0xff532232:0xff344555},null,Shader.TileMode.CLAMP));canvas.drawCircle(x,y,radius,paint);paint.setShader(null);
+        if(sun){paint.setColor(redMode?0xffffb3bb:0xffffefba);canvas.drawCircle(x-radius*.23f,y-radius*.26f,radius*.64f,paint);}
     }
     private boolean label(Canvas canvas,Star star,PointF p,boolean active){
         boolean solar=scene.solar.containsKey(star.id);String name=displayNames.get(star.id);
@@ -326,8 +353,7 @@ public final class SkyMapView extends View {
         for(int placement=0;placement<4;placement++){
             float x=placement%2==0?p.x+gap:p.x-width-gap;
             float y=p.y+(placement<2?-dp(6):dp(20));
-            x=Math.max(dp(7),Math.min(getWidth()-dp(7)-width,x));
-            y=Math.max(dp(82),Math.min(getHeight()-dp(62),y));
+            if(x<dp(7)||x+width>getWidth()-dp(7)||y<dp(88)||y>getHeight()-dp(68))continue;
             rect.set(x-dp(3),y-dp(13),x+width+dp(3),y+dp(4));
             boolean collision=false;
             for(RectF other:labels)if(RectF.intersects(rect,other)){collision=true;break;}
@@ -335,6 +361,13 @@ public final class SkyMapView extends View {
             labels.add(rect);labelOwners.add(star);
             color(active?0xffa3f2d6:solar?0xfff7ddaa:0xffc1ccdd,0xffe291a3);
             canvas.drawText(name,x,y,paint);return true;
+        }
+        if(active){
+            float x=Math.max(dp(7),Math.min(getWidth()-dp(7)-width,p.x+gap));
+            float y=Math.max(dp(88),Math.min(getHeight()-dp(68),p.y-dp(6)));
+            rect.set(x-dp(3),y-dp(13),x+width+dp(3),y+dp(4));
+            labels.add(rect);labelOwners.add(star);
+            color(0xffa3f2d6,0xffe291a3);canvas.drawText(name,x,y,paint);return true;
         }
         return false;
     }

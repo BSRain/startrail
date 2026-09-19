@@ -49,3 +49,5 @@ __pycache__/
 *.pyc
 work/astro-tests/*
 !work/astro-tests/*.java
+
+!work/experience-v42.md

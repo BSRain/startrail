@@ -72,7 +72,7 @@ final class JournalTransferController {
         final int additions;
         try{java.util.Set<String> ids=new java.util.HashSet<>();for(ObservationStore.Entry e:journal.all())ids.add(e.id);int count=0;for(ObservationStore.Entry e:incoming)if(!ids.contains(e.id))count++;additions=count;}
         catch(IllegalStateException ex){toast(ex.getMessage());return;}
-        restoreDialog=new AlertDialog.Builder(activity).setTitle(getString(R.string.transfer_preview_restore_01))
+        restoreDialog=new DialogStyle.Builder(activity).setTitle(getString(R.string.transfer_preview_restore_01))
             .setMessage(getString(R.string.transfer_preview_restore_02)+incoming.size()+getString(R.string.transfer_preview_restore_03)+additions+getString(R.string.transfer_preview_restore_04))
             .setNegativeButton(getString(R.string.cancel),null).setPositiveButton(getString(R.string.transfer_preview_restore_05),(d,w)->{
                 try{int added=journal.mergeImported(incoming);toast(getString(R.string.transfer_preview_restore_06)+added+getString(R.string.transfer_toast_07));onRestored.run();}

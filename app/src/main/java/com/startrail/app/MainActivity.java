@@ -96,6 +96,7 @@ public class MainActivity extends Activity {
     private boolean live = true, redMode, showLines = true, showLabels = true;
     private long fixedTime;
     private boolean showDeepSky=true;
+    private float galaxyOpacity=.8f, artworkOpacity=.7f;
     private boolean showGalaxy=true,showArtwork=true,showGrid,timelineExpanded,timelineDragging;
     private int playbackDirection,playbackRate=600;
     private long playbackElapsed;
@@ -158,6 +159,7 @@ public class MainActivity extends Activity {
         longitude=Double.longBitsToDouble(prefs.getLong("longitude",Double.doubleToLongBits(longitude)));
         place=prefs.getString("place",place);redMode=prefs.getBoolean("redMode",false);
         showLines=prefs.getBoolean("lines",true);showLabels=prefs.getBoolean("labels",true);
+        galaxyOpacity=readOpacity("galaxyOpacity",.8f);artworkOpacity=readOpacity("artworkOpacity",.7f);
         showDeepSky=prefs.getBoolean("deepSky",true);showGalaxy=prefs.getBoolean("galaxy",true);showArtwork=prefs.getBoolean("artwork",true);showGrid=prefs.getBoolean("grid",false);
         scene=SkyScene.create(now(),latitude,longitude);stars=new ArrayList<>(scene.objects);
         try(InputStream input=getAssets().open("background-stars.csv")){backgroundStars=BackgroundStars.load(input);}catch(java.io.IOException ex){toast(getString(R.string.main_on_create_01));}
@@ -243,7 +245,7 @@ public class MainActivity extends Activity {
             if(target!=null){LinearLayout guide=row();guide.setBackground(round(panel(),10,line()));TextView info=text(getString(R.string.main_render_sky_09)+shortName(target)+(live?getString(R.string.main_render_sky_10):getString(R.string.main_render_sky_11)),12,accent(),true);info.setPadding(dp(12),0,0,0);guide.addView(info,new LinearLayout.LayoutParams(0,-2,1));guide.addView(button(getString(R.string.main_render_sky_12),()->{guidanceId=null;renderPage();}));content.addView(guide);guidanceBanner=guide;}
         }
         sky=new SkyMapView(this,stars,StarCatalog.lines());sky.setLayers(showLines,showLabels);sky.setRedMode(redMode);sky.setSelected(selected);sky.setManualView(chartRotation,chartElevation,chartFov);
-        sky.setDecorations(showGalaxy,showArtwork,showGrid);sky.setDeepSkyVisible(showDeepSky);
+        sky.setDecorationOpacity(galaxyOpacity,artworkOpacity);sky.setDecorations(showGalaxy,showArtwork,showGrid);sky.setDeepSkyVisible(showDeepSky);
         sky.setBackgroundStars(renderBackgroundStars);sky.setScene(scene,latitude,longitude);sky.setGuidanceTarget(scene.find(guidanceId));sky.setListener(star->{selected=star;details(star);});sky.setOnManualModeRequested(()->setFollowing(false));sky.setTracking(followPhone);sky.setDirectionReliable(orientation.isDirectionReliable()&&calibrationDialog==null);
         content.addView(sky,new LinearLayout.LayoutParams(-1,0,1));
         if(timelineExpanded)renderTimeline(content);
@@ -286,7 +288,7 @@ public class MainActivity extends Activity {
         adjustment.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){public void onStartTrackingTouch(SeekBar bar){}public void onStopTrackingTouch(SeekBar bar){}public void onProgressChanged(SeekBar bar,int progress,boolean fromUser){value.setText(String.format(Locale.CHINA,getString(R.string.main_calibration_help_03),(double)progress-30));orientation.setHeadingCorrection(progress-30);}});
         LinearLayout changes=row();changes.addView(button("− 1°",()->adjustment.setProgress(adjustment.getProgress()-1)),new LinearLayout.LayoutParams(0,dp(44),1));changes.addView(button(getString(R.string.main_on_progress_changed_01),()->adjustment.setProgress(30)),new LinearLayout.LayoutParams(0,dp(44),1));changes.addView(button("+ 1°",()->adjustment.setProgress(adjustment.getProgress()+1)),new LinearLayout.LayoutParams(0,dp(44),1));content.addView(changes);
         content.addView(text(getString(R.string.main_on_progress_changed_02),12,muted(),false));
-        AlertDialog dialog=new AlertDialog.Builder(this).setTitle(getString(R.string.main_on_progress_changed_03)).setView(scroll).setPositiveButton(getString(R.string.save),(d,w)->{headingCorrection=adjustment.getProgress()-30;prefs.edit().putFloat("headingCorrection",(float)headingCorrection).apply();orientation.setHeadingCorrection(headingCorrection);}).setNegativeButton(getString(R.string.cancel),null).create();
+        AlertDialog dialog=new DialogStyle.Builder(this).setTitle(getString(R.string.main_on_progress_changed_03)).setView(scroll).setPositiveButton(getString(R.string.save),(d,w)->{headingCorrection=adjustment.getProgress()-30;prefs.edit().putFloat("headingCorrection",(float)headingCorrection).apply();orientation.setHeadingCorrection(headingCorrection);}).setNegativeButton(getString(R.string.cancel),null).create();
         calibrationDialog=dialog;
         dialog.setOnDismissListener(d->{orientation.setHeadingCorrection(headingCorrection);calibrationDialog=null;});dialog.show();if(dialog.getWindow()!=null){dialog.getWindow().setGravity(Gravity.BOTTOM);dialog.getWindow().setDimAmount(0.25f);}
     }
@@ -415,7 +417,7 @@ public class MainActivity extends Activity {
         final AlertDialog[] dialog={null};LinearLayout actions=dialogColumn();
         actions.addView(button(getString(R.string.main_show_recommendation_01),()->{Star target=scene.find(pick.starId);if(target!=null){dialog[0].dismiss();showObservingProfile(target);}}));
         actions.addView(button(getString(R.string.main_show_recommendation_02),()->addToObservingList(pick.starId)));
-        dialog[0]=new AlertDialog.Builder(this).setTitle(pick.displayName+getString(R.string.main_show_recommendation_03))
+        dialog[0]=new DialogStyle.Builder(this).setTitle(pick.displayName+getString(R.string.main_show_recommendation_03))
             .setMessage(observingWindow(pick)+getString(R.string.main_show_recommendation_04)+stamp(pick.bestTime.toEpochMilli())+"\n"+pick.reason+"\n"+pick.equipment+"\n"+pick.moonlightNote+(pick.moonPhaseNote==null?"":"\n"+pick.moonPhaseNote)+getString(R.string.main_show_recommendation_05))
             .setView(actions)
             .setPositiveButton(getString(R.string.guide_now),(d,w)->{Star target=scene.find(pick.starId);if(target!=null)startGuidance(target);})
@@ -436,7 +438,7 @@ public class MainActivity extends Activity {
         content.addView(text(getString(R.string.main_show_observing_list_01),12,muted(),false));
         TextView count=text("",13,accent(),true);content.addView(count);
         ScrollView scroll=new ScrollView(this);LinearLayout list=column();scroll.addView(list);content.addView(scroll,new LinearLayout.LayoutParams(-1,dp(370)));
-        AlertDialog dialog=new AlertDialog.Builder(this).setTitle(getString(R.string.main_show_observing_list_02)).setView(content).setNegativeButton(getString(R.string.close),null).create();
+        AlertDialog dialog=new DialogStyle.Builder(this).setTitle(getString(R.string.main_show_observing_list_02)).setView(content).setNegativeButton(getString(R.string.close),null).create();
         Runnable fill=()->{
             list.removeAllViews();
             try{
@@ -463,7 +465,7 @@ public class MainActivity extends Activity {
         LinearLayout content=dialogColumn();content.addView(text(observerPlace+String.format(Locale.CHINA,"  %.3f°, %.3f°",lat,lon),12,muted(),false));
         TextView status=text(getString(R.string.main_show_observing_profile_01),13,accent(),true);content.addView(status);
         LinearLayout resultArea=column();content.addView(resultArea);ScrollView scroll=new ScrollView(this);scroll.addView(content);
-        final AlertDialog dialog=new AlertDialog.Builder(this).setTitle(shortName(target)+getString(R.string.main_show_observing_profile_02)).setView(scroll).setNegativeButton(getString(R.string.close),null).create();
+        final AlertDialog dialog=new DialogStyle.Builder(this).setTitle(shortName(target)+getString(R.string.main_show_observing_profile_02)).setView(scroll).setNegativeButton(getString(R.string.close),null).create();
         eventsDialog=dialog;dialog.setOnDismissListener(d->{if(eventsDialog==dialog){eventsGeneration++;if(eventsTask!=null)eventsTask.cancel(true);eventsDialog=null;}});dialog.show();content.setBackgroundColor(panel());if(dialog.getWindow()!=null)dialog.getWindow().setBackgroundDrawable(round(panel(),20,line()));
         eventsTask=eventsExecutor.submit(()->{
             try{
@@ -511,7 +513,7 @@ public class MainActivity extends Activity {
         TextView favorite=button(favorites.contains(star.id)?getString(R.string.main_details_12):getString(R.string.main_details_13),()->{});
         favorite.setOnClickListener(v->{try{boolean saved=favorites.toggle(star.id);favorite.setText(saved?getString(R.string.main_details_12):getString(R.string.main_details_13));toast(saved?getString(R.string.main_details_14):getString(R.string.main_details_15));}catch(IllegalArgumentException|IllegalStateException ex){toast(ex.getMessage());}});content.addView(favorite);
         ScrollView detailScroll=new ScrollView(this);detailScroll.addView(content);
-        detailDialog[0]=new AlertDialog.Builder(this).setTitle(shortName(star)).setView(detailScroll)
+        detailDialog[0]=new DialogStyle.Builder(this).setTitle(shortName(star)).setView(detailScroll)
             .setPositiveButton(star.id.equals("sun")?getString(R.string.main_details_16):getString(R.string.start_guidance),(d,w)->{if(star.id.equals("sun")){setFollowing(false);guidanceId=null;tab=0;renderPage();sky.focus(star);}else startGuidance(star);})
             .setNeutralButton(getString(R.string.main_details_18),(d,w)->{guidanceId=null;setFollowing(false);tab=0;body.removeAllViews();renderPage();if(sky!=null)sky.focus(star);if(position(star).altitude<=0)toast(getString(R.string.main_details_19));})
             .setNegativeButton(getString(R.string.close),null).show();
@@ -522,7 +524,7 @@ public class MainActivity extends Activity {
         LinearLayout shortcuts=row();shortcuts.addView(button(getString(R.string.main_search_02),this::showFavorites),new LinearLayout.LayoutParams(0,-2,1));shortcuts.addView(button(getString(R.string.main_search_03),this::showDeepSkyCatalog),new LinearLayout.LayoutParams(0,-2,1));content.addView(shortcuts);
         TextView count=text("",12,muted(),false);content.addView(count);
         ScrollView scroll=new ScrollView(this);LinearLayout results=column();scroll.addView(results);content.addView(scroll,new LinearLayout.LayoutParams(-1,dp(320)));
-        AlertDialog dialog=new AlertDialog.Builder(this).setTitle(getString(R.string.main_search_04)).setView(content).setNegativeButton(getString(R.string.close),null).create();
+        AlertDialog dialog=new DialogStyle.Builder(this).setTitle(getString(R.string.main_search_04)).setView(content).setNegativeButton(getString(R.string.close),null).create();
         Runnable filter=()->{
             results.removeAllViews();String q=input.getText().toString().trim().toLowerCase(Locale.ROOT);int matched=0;
             for(Star s:stars){String hay=(s.id+" "+s.name+" "+s.chineseName+" "+s.constellation+" "+String.join(" ",s.aliases)).toLowerCase(Locale.ROOT);
@@ -538,7 +540,7 @@ public class MainActivity extends Activity {
     private void chooseTime(){
         pausePlayback();
         LinearLayout content=dialogColumn();content.addView(text(getString(R.string.main_choose_time_01)+stamp(now().toEpochMilli())+getString(R.string.main_choose_time_02)+ZoneId.systemDefault().getId()+getString(R.string.main_choose_time_03),13,muted(),false));
-        new AlertDialog.Builder(this).setTitle(getString(R.string.main_choose_time_04)).setView(content).setPositiveButton(getString(R.string.main_choose_time_05),(d,w)->{
+        new DialogStyle.Builder(this).setTitle(getString(R.string.main_choose_time_04)).setView(content).setPositiveButton(getString(R.string.main_choose_time_05),(d,w)->{
             Calendar calendar=Calendar.getInstance();calendar.setTimeInMillis(now().toEpochMilli());
             DatePickerDialog date=new DatePickerDialog(this,(picker,y,m,day)->{
                 calendar.set(y,m,day);
@@ -552,7 +554,7 @@ public class MainActivity extends Activity {
         pausePlayback();
         String[] names={getString(R.string.main_choose_location_01),getString(R.string.main_choose_location_02),getString(R.string.main_choose_location_03),getString(R.string.main_choose_location_04),getString(R.string.main_choose_location_05),getString(R.string.main_choose_location_06),getString(R.string.main_choose_location_07),getString(R.string.main_choose_location_08),getString(R.string.main_choose_location_09)};
         double[][] coords={{39.9042,116.4074},{31.2304,121.4737},{22.3193,114.1694},{29.6520,91.1721},{43.8256,87.6168},{-33.8688,151.2093},{51.5074,-0.1278}};
-        new AlertDialog.Builder(this).setTitle(getString(R.string.main_choose_location_10)+place).setItems(names,(d,index)->{
+        new DialogStyle.Builder(this).setTitle(getString(R.string.main_choose_location_10)+place).setItems(names,(d,index)->{
             if(index==0){locate();return;}if(index==names.length-1){manualLocation();return;}
             stopLocation();setLocation(names[index]+getString(R.string.main_choose_location_11),coords[index-1][0],coords[index-1][1]);
         }).setNegativeButton(getString(R.string.cancel),null).show();
@@ -563,7 +565,7 @@ public class MainActivity extends Activity {
         EditText lat=input(getString(R.string.main_manual_location_04)),lon=input(getString(R.string.main_manual_location_05));
         int type=InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL|InputType.TYPE_NUMBER_FLAG_SIGNED;lat.setInputType(type);lon.setInputType(type);
         lat.setText(String.format(Locale.US,"%.4f",latitude));lon.setText(String.format(Locale.US,"%.4f",longitude));content.addView(lat);content.addView(lon);
-        AlertDialog dialog=new AlertDialog.Builder(this).setTitle(getString(R.string.main_manual_location_06)).setView(content).setPositiveButton(getString(R.string.apply),null).setNegativeButton(getString(R.string.cancel),null).create();dialog.show();
+        AlertDialog dialog=new DialogStyle.Builder(this).setTitle(getString(R.string.main_manual_location_06)).setView(content).setPositiveButton(getString(R.string.apply),null).setNegativeButton(getString(R.string.cancel),null).create();dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{try{
             double a=Double.parseDouble(lat.getText().toString().trim()),o=Double.parseDouble(lon.getText().toString().trim());
             if(!Double.isFinite(a)||!Double.isFinite(o)||a< -90||a>90||o< -180||o>180)throw new NumberFormatException();
@@ -621,8 +623,8 @@ public class MainActivity extends Activity {
         ScrollView scroll=new ScrollView(this);LinearLayout content=dialogColumn();scroll.addView(content);
         content.addView(text(stamp(entry.time)+"\n"+entry.place+String.format(Locale.CHINA,"\n%.4f°, %.4f°",entry.latitude,entry.longitude),12,accent(),false));
         TextView note=text(entry.note.isEmpty()?getString(R.string.main_view_entry_01):entry.note,15,ink(),false);note.setPadding(0,dp(16),0,0);content.addView(note);
-        new AlertDialog.Builder(this).setTitle(entry.target).setView(scroll).setPositiveButton(getString(R.string.main_view_entry_02),(d,w)->editEntry(entry,null)).setNeutralButton(getString(R.string.main_view_entry_03),(d,w)->{
-            new AlertDialog.Builder(this).setTitle(getString(R.string.main_view_entry_04)).setMessage(getString(R.string.main_view_entry_05)).setNegativeButton(getString(R.string.cancel),null).setPositiveButton(getString(R.string.main_view_entry_03),(x,y)->{try{journal.delete(entry.id);renderPage();}catch(IllegalStateException ex){toast(ex.getMessage());}}).show();
+        new DialogStyle.Builder(this).setTitle(entry.target).setView(scroll).setPositiveButton(getString(R.string.main_view_entry_02),(d,w)->editEntry(entry,null)).setNeutralButton(getString(R.string.main_view_entry_03),(d,w)->{
+            new DialogStyle.Builder(this).setTitle(getString(R.string.main_view_entry_04)).setMessage(getString(R.string.main_view_entry_05)).setNegativeButton(getString(R.string.cancel),null).setPositiveButton(getString(R.string.main_view_entry_03),(x,y)->{try{journal.delete(entry.id);renderPage();}catch(IllegalStateException ex){toast(ex.getMessage());}}).show();
         }).setNegativeButton(getString(R.string.close),null).show();
     }
     private void editEntry(ObservationStore.Entry existing,Star star){
@@ -634,7 +636,7 @@ public class MainActivity extends Activity {
         EditText target=input(getString(R.string.main_edit_entry_02));target.setText(existing!=null?existing.target:star!=null?shortName(star):"");content.addView(target);
         EditText note=input(getString(R.string.main_edit_entry_03));note.setSingleLine(false);note.setMinLines(4);note.setMaxLines(8);note.setGravity(Gravity.TOP);note.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);if(existing!=null)note.setText(existing.note);content.addView(note);
         ScrollView editorScroll=new ScrollView(this);editorScroll.addView(content);
-        AlertDialog dialog=new AlertDialog.Builder(this).setTitle(existing==null?getString(R.string.main_edit_entry_04):getString(R.string.main_edit_entry_05)).setView(editorScroll).setPositiveButton(getString(R.string.save),null).setNegativeButton(getString(R.string.cancel),null).create();dialog.show();
+        AlertDialog dialog=new DialogStyle.Builder(this).setTitle(existing==null?getString(R.string.main_edit_entry_04):getString(R.string.main_edit_entry_05)).setView(editorScroll).setPositiveButton(getString(R.string.save),null).setNegativeButton(getString(R.string.cancel),null).create();dialog.show();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{String name=target.getText().toString().trim();if(name.isEmpty()){target.setError(getString(R.string.main_edit_entry_06));return;}if(name.length()>80){target.setError(getString(R.string.main_edit_entry_07));return;}if(note.length()>5000){note.setError(getString(R.string.main_edit_entry_08));return;}
             ObservationStore.Entry entry=new ObservationStore.Entry(existing!=null?existing.starId:star!=null?star.id:"",name,observedPlace,observedTime,observedLat,observedLon,note.getText().toString().trim());if(existing!=null)entry.id=existing.id;
             try{journal.save(entry);dialog.dismiss();toast(getString(R.string.main_edit_entry_09));renderPage();}catch(IllegalStateException ex){toast(ex.getMessage());}
@@ -654,16 +656,49 @@ public class MainActivity extends Activity {
             if(resultCode==RESULT_OK&&data!=null&&data.getData()!=null){ensureWeatherPlan();weatherPlan.importKey(data.getData());}
         }else journalTransfer.onActivityResult(requestCode,resultCode,data);
     }
-    private void settings(){
+    private AlertDialog settings(){
         pausePlayback();
         LinearLayout content=dialogColumn();
         CheckBox deep=check(getString(R.string.main_settings_01),showDeepSky);content.addView(deep);
-        CheckBox galaxy=check(getString(R.string.main_settings_02),showGalaxy),art=check(getString(R.string.main_settings_03),showArtwork),grid=check(getString(R.string.main_settings_04),showGrid);content.addView(galaxy);content.addView(art);content.addView(grid);
+        CheckBox galaxy=check(getString(R.string.main_settings_02),showGalaxy),art=check(getString(R.string.main_settings_03),showArtwork),grid=check(getString(R.string.main_settings_04),showGrid);content.addView(galaxy);
+        SeekBar galaxyStrength=opacitySlider(content,R.string.galaxy_opacity,galaxyOpacity);
+        content.addView(art);
+        SeekBar artworkStrength=opacitySlider(content,R.string.artwork_opacity,artworkOpacity);
+        Runnable preview=()->{if(sky!=null)sky.setDecorationOpacity(galaxyStrength.getProgress()/100f,artworkStrength.getProgress()/100f);};
+        bindOpacity(galaxyStrength,preview);bindOpacity(artworkStrength,preview);
+        galaxyStrength.setEnabled(galaxy.isChecked());artworkStrength.setEnabled(art.isChecked());
+        galaxy.setOnCheckedChangeListener((v,checked)->galaxyStrength.setEnabled(checked));
+        art.setOnCheckedChangeListener((v,checked)->artworkStrength.setEnabled(checked));
+        content.addView(grid);
         CheckBox lines=check(getString(R.string.main_settings_05),showLines),labels=check(getString(R.string.main_settings_06),showLabels),night=check(getString(R.string.main_settings_07),redMode);content.addView(lines);content.addView(labels);content.addView(night);
         content.addView(text(getString(R.string.main_settings_08)+place+String.format(Locale.CHINA,"  %.4f°, %.4f°",latitude,longitude)+getString(R.string.main_settings_09)+ZoneId.systemDefault().getId()+getString(R.string.main_settings_10)+DeepSkyCatalog.entries().size()+getString(R.string.main_settings_11)+backgroundStars.size()+getString(R.string.main_settings_12),12,muted(),false));
         content.addView(button(getString(R.string.main_settings_13),this::about));
         ScrollView settingsScroll=new ScrollView(this);settingsScroll.addView(content);
-        new AlertDialog.Builder(this).setTitle(getString(R.string.main_settings_14)).setView(settingsScroll).setPositiveButton(getString(R.string.apply),(d,w)->{showDeepSky=deep.isChecked();showGalaxy=galaxy.isChecked();showArtwork=art.isChecked();showGrid=grid.isChecked();showLines=lines.isChecked();showLabels=labels.isChecked();redMode=night.isChecked();prefs.edit().putBoolean("deepSky",showDeepSky).putBoolean("galaxy",showGalaxy).putBoolean("artwork",showArtwork).putBoolean("grid",showGrid).putBoolean("lines",showLines).putBoolean("labels",showLabels).putBoolean("redMode",redMode).apply();buildShell();}).setNegativeButton(getString(R.string.cancel),null).show();
+        AlertDialog settingsDialog=new DialogStyle.Builder(this).setTitle(getString(R.string.main_settings_14)).setView(settingsScroll).setPositiveButton(getString(R.string.apply),(d,w)->{galaxyOpacity=galaxyStrength.getProgress()/100f;artworkOpacity=artworkStrength.getProgress()/100f;showDeepSky=deep.isChecked();showGalaxy=galaxy.isChecked();showArtwork=art.isChecked();showGrid=grid.isChecked();showLines=lines.isChecked();showLabels=labels.isChecked();redMode=night.isChecked();prefs.edit().putFloat("galaxyOpacity",galaxyOpacity).putFloat("artworkOpacity",artworkOpacity).putBoolean("deepSky",showDeepSky).putBoolean("galaxy",showGalaxy).putBoolean("artwork",showArtwork).putBoolean("grid",showGrid).putBoolean("lines",showLines).putBoolean("labels",showLabels).putBoolean("redMode",redMode).apply();buildShell();}).setNegativeButton(getString(R.string.cancel),null).show();
+        settingsDialog.setOnDismissListener(d->{if(sky!=null)sky.setDecorationOpacity(galaxyOpacity,artworkOpacity);});
+        return settingsDialog;
+    }
+    private float readOpacity(String key,float fallback){
+        float value=prefs.getFloat(key,fallback);
+        return Float.isFinite(value)?Math.max(0f,Math.min(1f,value)):fallback;
+    }
+    private SeekBar opacitySlider(LinearLayout parent,int title,float value){
+        TextView label=text(getString(R.string.opacity_percent,getString(title),Math.round(value*100)),13,muted(),false);
+        parent.addView(label);
+        SeekBar slider=new SeekBar(this);slider.setMax(100);slider.setProgress(Math.round(value*100));
+        slider.setContentDescription(getString(title));slider.setMinimumHeight(dp(48));
+        slider.setTag(new Object[]{label,title});parent.addView(slider);return slider;
+    }
+    private void bindOpacity(SeekBar slider,Runnable preview){
+        slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            public void onProgressChanged(SeekBar bar,int progress,boolean user){
+                Object[] tag=(Object[])bar.getTag();
+                ((TextView)tag[0]).setText(getString(R.string.opacity_percent,getString((Integer)tag[1]),progress));
+                preview.run();
+            }
+            public void onStartTrackingTouch(SeekBar bar){}
+            public void onStopTrackingTouch(SeekBar bar){}
+        });
     }
     private void about(){new AppInfoDialog(this,redMode).show();}
     private LinearLayout column(){return dialogUi.column();}

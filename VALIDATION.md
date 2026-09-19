@@ -1,26 +1,28 @@
-# 星迹 4.1 验证结果
+# 星迹 4.2 验证结果
 
-日期：2026-09-14（Asia/Hong_Kong）。
+日期：2026-09-19（Asia/Hong_Kong）。
 
-- debug APK、unsigned release APK、测试 APK、JUnit 与 Lint 最终构建成功（55 秒）。
+- debug APK、unsigned release APK、测试 APK、JVM 测试与 Lint 最终构建成功（56 秒）。
 - 43 项 JVM 测试全部通过。
-- Android 15 / API 35 模拟器单次全量 129 项全部通过，耗时 109.826 秒。使用 -e package com.startrail.app 限定项目测试，避免旧运行器扫描依赖库。
-- 备份流读写/预览/取消/合并测试改为检查独立 JournalTransferController 的状态；原有行为断言保持。目录/收藏、天气、私钥导入、星图与地平线下显示等回归继续通过。
-- 截图核对目录文案、坐标、分类及配置页面布局。天气配置全新安装不预填个人账号，测试只使用公开向量及假数据。
-- Lint 从 25 条降到 2 条，0 错误。剩余 LockedOrientationActivity / DiscouragedApi 为竖屏锁定，保留待横屏布局及传感器专项验证。需要失败确认及回滚的 commit 采用带原因的窄范围 ApplySharedPref 抑制。
-- 自定义 View 支持标准构造函数；Android 新旧云备份及设备迁移规则显式排除全部应用数据，天气私钥仍由 AndroidKeyStore 加密保存。
-- APK 4.1 / versionCode 13，debug 签名与 4.0 一致，可覆盖升级。没有生成新的正式签名密钥。
-- assembleRelease 未配置签名时生成 app-release-unsigned.apk。另用不完整环境配置验证构建会拒绝，未记录真实密码或密钥。
-- Git 本地 main 分支从本次工程整理建立；v4.1 标签指向验证提交，无远程上传。源码与交付 ZIP 排除工具、私钥和构建缓存。
+- Android 15 / API 35 模拟器最终全量 140 项全部通过，耗时 104.832 秒。使用 `-e package com.startrail.app` 限定项目测试，避免旧运行器扫描依赖库。
+- 约 320×569dp 小屏（720×1280 px、360 dpi）额外 4 项弹窗、设置事务与视觉捕获测试全部通过，耗时 11.323 秒。
+- 新增标签缩放密度、深空名称、HUD 避让、选中标签、红光绘制、装饰浓度、设置预览/取消/应用和弹窗回调测试。原地平线下显示、时间轴、传感器、天气模拟数据、收藏、清单及备份回归通过。
+- 固定香港冬季夜空截图核对猎户座、月球和设置。日月图标按可读性放大，不表示真实角直径或月面纹理。
+- Lint：0 错误、2 条原有竖屏相关警告（LockedOrientationActivity / DiscouragedApi）。弹窗 framework 标题 ID 查询只在打开时执行，因无公开常量采用有原因的窄范围抑制。
+- APK 为 4.2 / versionCode 14。已执行 adb install -r 覆盖安装，debug 签名沿用旧版证书，SHA-256 为 `9c10bef51743e82ffea0c70d2e8cfcaebbeae7fd5ade4784f843d108830884a6`。
+- 未生成或更换正式签名密钥；未配置正式签名的 release 仍明确生成 unsigned APK。
+- 本地 Git 保留 v4.1 历史，4.2 以 v4.2 标签归档；没有配置远程或上传源码。
+
+## 首轮问题与复验
+
+首轮 140 跑 / 0 断言失败 / 1 清理错误。新增设置测试在父类 tearDown 清空字段后读取 prefs，发生空指针；已改为提前保存局部引用及恢复数值。最终全量和小屏附加测试均通过，首轮日志保留在 work/instrumentation-v42-attempt1.txt。
 
 ## 范围与限制
 
-MainActivity 从 768 行变为 683 行，拆出文件任务、目录/收藏、帮助/许可与共享控件组件。Activity 仍保留星图、导航和部分设置/观测流程，本次不是全部重写。
+本轮完成既定观星体验与工程收尾。仍保留竖屏，未为消除警告直接升级 SDK 或开放横屏。极端重合的选中与寻星两个活动目标不保证名称完全无重叠，普通候选标签执行矩形避让。
 
-主要 UI 文案资源化，未提供完整外语翻译；模型和天文数据仍以中文为主。未为消除告警直接升级 targetSdk 或开放横屏。
+本轮未进行真实和风账号连接、户外指南针或 GPS 测量；用户此前反馈真机使用正常。天气测试使用模拟响应及公开测试向量，不包含用户私钥。手记备份仍不包含收藏、清单、设置或私钥。
 
-正式 release 产物尚未签名，不能直接安装。用户安装应选择已验证同证书的 debug 升级包。公开发布需按 RELEASE.md 配置并妥善保管正式密钥，采用新证书不能覆盖旧调试版。
+用户安装选择已验证同证书的 debug 升级包；unsigned release 不能直接安装。正式发布按 RELEASE.md 配置自有密钥，新证书不能覆盖旧调试版。
 
-天气真实账号连通性仍需用户私钥与权限，未在此次工程整理中访问用户天气账户。普通手记备份仍不包含收藏、清单、设置或私钥。
-
-记录：work/build-v41.log、work/instrumentation-v41.txt、work/jvm-v41.txt、work/signature-v41.txt、work/signing-config-guard-v41.txt、work/refactor-v41.md。
+记录：work/build-v42.log、work/instrumentation-v42.txt、work/instrumentation-v42-attempt1.txt、work/small-screen-v42.txt、work/jvm-v42.txt、work/signature-v42.txt、work/experience-v42.md。

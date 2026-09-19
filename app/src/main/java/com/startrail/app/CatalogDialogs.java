@@ -34,7 +34,7 @@ final class CatalogDialogs {
         content.addView(ui.text(getString(R.string.catalog_get_string_01),12,ui.muted(),false));
         LinearLayout filters=ui.row();content.addView(filters);TextView count=ui.text("",12,ui.accent(),true);content.addView(count);
         ScrollView scroll=new ScrollView(activity);LinearLayout list=ui.column();scroll.addView(list);content.addView(scroll,new LinearLayout.LayoutParams(-1,ui.dp(350)));
-        AlertDialog dialog=new AlertDialog.Builder(activity).setTitle(getString(R.string.main_search_03)).setView(content).setNegativeButton(getString(R.string.close),null).create();
+        AlertDialog dialog=new DialogStyle.Builder(activity).setTitle(getString(R.string.main_search_03)).setView(content).setNegativeButton(getString(R.string.close),null).create();
         final int[] selectedCategory={0};String[] labels={getString(R.string.catalog_get_string_02),getString(R.string.catalog_get_string_03),getString(R.string.catalog_get_string_04),getString(R.string.catalog_get_string_05)};
         Runnable fill=()->{
             list.removeAllViews();int total=0;
@@ -55,7 +55,7 @@ final class CatalogDialogs {
         
         LinearLayout content=ui.dialogColumn();TextView summary=ui.text("",12,ui.muted(),false);content.addView(summary);
         ScrollView scroll=new ScrollView(activity);scroll.setBackgroundColor(ui.panel());content.setBackgroundColor(ui.panel());LinearLayout list=ui.column();scroll.addView(list);content.addView(scroll,new LinearLayout.LayoutParams(-1,ui.dp(Math.min(360,Math.max(100,favorites.ids().size()*82)))));
-        AlertDialog dialog=new AlertDialog.Builder(activity).setTitle(getString(R.string.catalog_get_string_07)).setView(content).setNegativeButton(getString(R.string.close),null).create();
+        AlertDialog dialog=new DialogStyle.Builder(activity).setTitle(getString(R.string.catalog_get_string_07)).setView(content).setNegativeButton(getString(R.string.close),null).create();
         Runnable fill=()->{
             list.removeAllViews();List<String> ids=favorites.ids();summary.setText(getString(R.string.ui_favorites_summary,ids.size(),(live?getString(R.string.catalog_get_string_08):getString(R.string.time_simulated_instant)),timestamp));
             if(ids.isEmpty())list.addView(ui.text(getString(R.string.catalog_get_string_09),14,ui.muted(),false));

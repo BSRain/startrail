@@ -277,7 +277,7 @@ final class WeatherPlanDialog {
     }
     private AlertDialog showDialog(String title, LinearLayout content) {
         ScrollView scroll = new ScrollView(activity); scroll.addView(content);
-        AlertDialog result = new AlertDialog.Builder(activity).setTitle(title).setView(scroll).setPositiveButton(R.string.weather_close, null).create();
+        AlertDialog result = new DialogStyle.Builder(activity).setTitle(title).setView(scroll).setPositiveButton(R.string.weather_close, null).create();
         result.show(); result.getWindow().setBackgroundDrawable(background(0xff101f30)); return result;
     }
     private GradientDrawable background(int color) { GradientDrawable d = new GradientDrawable(); d.setColor(color); d.setCornerRadius(dp(18)); return d; }

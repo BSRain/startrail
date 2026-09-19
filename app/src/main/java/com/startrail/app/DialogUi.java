@@ -25,7 +25,7 @@ final class DialogUi {
     LinearLayout dialogColumn(){LinearLayout l=column();l.setPadding(dp(24),dp(12),dp(24),dp(12));return l;}
     TextView text(String value,float size,int color,boolean bold){TextView t=new TextView(activity);t.setText(value);t.setTextSize(size);t.setTextColor(color);t.setLineSpacing(dp(3),1);if(bold)t.setTypeface(Typeface.DEFAULT,Typeface.BOLD);return t;}
     void title(LinearLayout parent,String value,int size){TextView t=text(value,size,ink(),true);t.setPadding(0,dp(12),0,dp(10));parent.addView(t);}
-    TextView button(String label,Runnable action){TextView t=text(label,13,accent(),true);t.setGravity(Gravity.CENTER);t.setPadding(dp(12),dp(8),dp(12),dp(8));t.setMinHeight(dp(44));t.setBackground(selectable());t.setOnClickListener(v->action.run());t.setFocusable(true);return t;}
+    TextView button(String label,Runnable action){TextView t=text(label,13,accent(),true);t.setGravity(Gravity.CENTER);t.setPadding(dp(12),dp(8),dp(12),dp(8));t.setMinHeight(dp(48));t.setBackground(selectable());t.setOnClickListener(v->action.run());t.setFocusable(true);return t;}
     android.graphics.drawable.Drawable selectable(){android.util.TypedValue v=new android.util.TypedValue();activity.getTheme().resolveAttribute(android.R.attr.selectableItemBackground,v,true);return activity.getDrawable(v.resourceId);}
     TextView pill(String label,Runnable action){TextView t=button(label,action);t.setBackground(round(panel(),14,line()));return t;}
     GradientDrawable round(int color,int radius,int stroke){GradientDrawable d=new GradientDrawable();d.setColor(color);d.setCornerRadius(dp(radius));d.setStroke(dp(1),stroke);return d;}

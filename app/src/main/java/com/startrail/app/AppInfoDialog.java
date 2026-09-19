@@ -14,7 +14,7 @@ final class AppInfoDialog {
         ScrollView scroll=new ScrollView(activity);LinearLayout content=dialogColumn();scroll.addView(content);
         content.addView(text(getString(R.string.info_defaults_01),17,accent(),true));
         TextView copy=text(getString(R.string.info_defaults_02),14,ink(),false);copy.setPadding(0,dp(16),0,0);content.addView(copy);
-        new AlertDialog.Builder(activity).setTitle(getString(R.string.info_defaults_03)).setView(scroll).setNeutralButton(getString(R.string.info_defaults_04),(d,w)->licenses()).setPositiveButton(getString(R.string.info_defaults_05),null).show();
+        new DialogStyle.Builder(activity).setTitle(getString(R.string.info_defaults_03)).setView(scroll).setNeutralButton(getString(R.string.info_defaults_04),(d,w)->licenses()).setPositiveButton(getString(R.string.info_defaults_05),null).show();
     }
     private void licenses(){
         try(java.io.InputStream stream=activity.getAssets().open("third-party-notices.txt")){
@@ -23,7 +23,7 @@ final class AppInfoDialog {
             while((count=stream.read(buffer))!=-1)bytes.write(buffer,0,count);
             ScrollView scroll=new ScrollView(activity);LinearLayout content=dialogColumn();scroll.addView(content);
             TextView copy=text(new String(bytes.toByteArray(),java.nio.charset.StandardCharsets.UTF_8),12,ink(),false);copy.setTextIsSelectable(true);content.addView(copy);
-            new AlertDialog.Builder(activity).setTitle(getString(R.string.info_defaults_04)).setView(scroll).setPositiveButton(getString(R.string.close),null).show();
+            new DialogStyle.Builder(activity).setTitle(getString(R.string.info_defaults_04)).setView(scroll).setPositiveButton(getString(R.string.close),null).show();
         }catch(java.io.IOException ex){toast(getString(R.string.info_licenses_01));}
     }
 

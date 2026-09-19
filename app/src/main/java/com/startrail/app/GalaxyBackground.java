@@ -16,6 +16,13 @@ import java.time.Instant;
 
 /** Original procedural Milky Way artwork aligned with the physical Galactic plane. */
 public final class GalaxyBackground {
+    private float opacity = 1f;
+
+    public void setOpacity(float value) {
+        if (!Float.isFinite(value)) throw new IllegalArgumentException("opacity");
+        opacity = Math.max(0f, Math.min(1f, value));
+    }
+
     private static final int CLOUDS=48;
     private final double[][] clouds=new double[CLOUDS][3], dust=new double[CLOUDS][3];
     private final float[] strength=new float[CLOUDS], spread=new float[CLOUDS];
@@ -47,9 +54,9 @@ public final class GalaxyBackground {
     }
 
     public void draw(Canvas canvas,SkyCamera.Basis frame,double fov,int width,int height,boolean redMode,boolean day){
-        if(!ready||canvas==null||frame==null||width<=0||height<=0)return;
+        if(opacity==0f||!ready||canvas==null||frame==null||width<=0||height<=0)return;
         double focal=height*.5/Math.tan(Math.toRadians(fov)*.5);
-        float fade=day?.25f:1f;
+        float fade=(day?.25f:1f)*opacity;
         paint.setColorFilter(redMode?redCloud:lavender);
         for(int i=0;i<CLOUDS;i++){
             SkyCamera.Point p=SkyCamera.project(clouds[i],frame,fov,width,height);
@@ -57,7 +64,7 @@ public final class GalaxyBackground {
             float radius=(float)(focal*Math.tan(Math.toRadians(16*spread[i]))/p.depth);
             radius=Math.min(radius,Math.max(width,height)*.72f);
             if(!intersects(p,radius,width,height))continue;
-            paint.setAlpha(clamp((int)(80*strength[i]*fade),1,86));
+            paint.setAlpha(clamp((int)(80*strength[i]*fade),0,86));
             place(p,radius); canvas.drawBitmap(cloudTexture,null,target,paint);
         }
         paint.setColorFilter(redMode?redDust:nightDust);

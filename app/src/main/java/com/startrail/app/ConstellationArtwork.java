@@ -18,6 +18,13 @@ import java.time.Instant;
  * there are no screen-fixed sprites or external artwork assets.
  */
 public final class ConstellationArtwork {
+    private float opacity = 1f;
+
+    public void setOpacity(float value) {
+        if (!Float.isFinite(value)) throw new IllegalArgumentException("opacity");
+        opacity = Math.max(0f, Math.min(1f, value));
+    }
+
     private static final float B = Float.NaN; // detail-stroke break
     private static final float[][] CYGNUS = {{-14,1},{-10,-3},{-3,-5},{3,-4},{7,-1},{8,3},{9,8},{11,13},{14,15},{17,14},{14,12},{12,9},{11,4},{9,0},{5,4},{1,11},{-2,7},{-7,5}};
     private static final float[][] CYGNUS_DETAIL = {{-12,1},{-2,1},{7,-1},{B,B},{-7,4},{-1,13},{1,4},{B,B},{-4,4},{-8,10},{0,5},{B,B},{-1,2},{4,8},{6,0},{B,B},{12,12},{14,14},{16,14}};
@@ -79,7 +86,8 @@ public final class ConstellationArtwork {
                      int width, int height, boolean redMode, boolean day) {
         if (canvas == null || camera == null || time == null || width <= 0 || height <= 0) return;
         float fade = (float) clamp((118.0 - fovDegrees) / 42.0, .16, 1.0);
-        float light = day ? .48f : 1f;
+        float light = (day ? .48f : 1f) * opacity;
+        if (opacity == 0f) return;
         int lineRgb = redMode ? 0xffd77989 : 0xffb9ddec;
         int accentRgb = redMode ? 0xffed9aa5 : 0xffe3c984;
 
