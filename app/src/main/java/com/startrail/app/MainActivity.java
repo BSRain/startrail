@@ -61,6 +61,7 @@ public class MainActivity extends Activity {
     private SharedPreferences prefs;
     private DialogUi dialogUi;
     private WeatherPlanDialog weatherPlan;
+    private EventCalendarDialog eventCalendar;
     private ObservationStore journal;
     private FavoritesStore favorites;
     private ObservingListStore observingList;
@@ -183,9 +184,9 @@ public class MainActivity extends Activity {
         buildShell();
     }
     @Override protected void onSaveInstanceState(Bundle out){super.onSaveInstanceState(out);out.putBoolean("timelineExpanded",timelineExpanded);out.putInt("playbackRate",playbackRate);out.putInt("tab",tab);out.putBoolean("live",live);out.putLong("fixedTime",fixedTime);out.putFloat("chartRotation",sky!=null?sky.getChartRotation():chartRotation);out.putDouble("chartElevation",sky!=null?sky.getViewingAltitude():chartElevation);out.putDouble("chartFov",sky!=null?sky.getFieldOfView():chartFov);out.putBoolean("immersive",immersive);out.putString("guidanceId",guidanceId);if(selected!=null)out.putString("selected",selected.id);}
-    @Override protected void onResume(){super.onResume();resumed=true;handler.removeCallbacks(ticker);handler.postDelayed(ticker,60000);if(body!=null)renderPage();if(weatherPlan!=null)weatherPlan.resume();}
-    @Override protected void onPause(){if(weatherPlan!=null)weatherPlan.pause();pausePlayback();super.onPause();resumed=false;handler.removeCallbacks(ticker);stopLocation();if(orientation!=null)orientation.stop();}
-    @Override protected void onDestroy(){if(weatherPlan!=null)weatherPlan.destroy();eventsGeneration++;if(eventsDialog!=null)eventsDialog.dismiss();if(eventsTask!=null)eventsTask.cancel(true);eventsExecutor.shutdownNow();if(activeToast!=null)activeToast.cancel();if(journalTransfer!=null)journalTransfer.destroy();if(calibrationDialog!=null)calibrationDialog.dismiss();plannerGeneration++;if(plannerTask!=null)plannerTask.cancel(true);plannerExecutor.shutdownNow();handler.removeCallbacksAndMessages(null);stopLocation();if(orientation!=null)orientation.stop();super.onDestroy();}
+    @Override protected void onResume(){super.onResume();resumed=true;handler.removeCallbacks(ticker);handler.postDelayed(ticker,60000);if(body!=null)renderPage();if(weatherPlan!=null)weatherPlan.resume();if(eventCalendar!=null)eventCalendar.resume();}
+    @Override protected void onPause(){if(eventCalendar!=null)eventCalendar.pause();if(weatherPlan!=null)weatherPlan.pause();pausePlayback();super.onPause();resumed=false;handler.removeCallbacks(ticker);stopLocation();if(orientation!=null)orientation.stop();}
+    @Override protected void onDestroy(){if(eventCalendar!=null)eventCalendar.destroy();if(weatherPlan!=null)weatherPlan.destroy();eventsGeneration++;if(eventsDialog!=null)eventsDialog.dismiss();if(eventsTask!=null)eventsTask.cancel(true);eventsExecutor.shutdownNow();if(activeToast!=null)activeToast.cancel();if(journalTransfer!=null)journalTransfer.destroy();if(calibrationDialog!=null)calibrationDialog.dismiss();plannerGeneration++;if(plannerTask!=null)plannerTask.cancel(true);plannerExecutor.shutdownNow();handler.removeCallbacksAndMessages(null);stopLocation();if(orientation!=null)orientation.stop();super.onDestroy();}
 
     private void buildShell(){
         getWindow().setStatusBarColor(bg());getWindow().setNavigationBarColor(bg());
@@ -356,6 +357,15 @@ public class MainActivity extends Activity {
         TextView sub=text(s.name+"  /  "+s.constellation,12,muted(),false);sub.setPadding(0,dp(5),0,dp(12));card.addView(sub);
         card.addView(text(coordinates(s),12,accent(),false));card.setOnClickListener(v->{selected=s;details(s);});card.setContentDescription(shortName(s)+"，"+coordinates(s)+getString(R.string.main_star_card_04));return card;
     }
+    private void showEventCalendar(){
+        pausePlayback();
+        if(eventCalendar==null)eventCalendar=new EventCalendarDialog(this,new EventCalendarDialog.Actions(){
+            public void preview(String id,Instant time){previewTarget(id,time);}
+            public void locate(){MainActivity.this.locate();}
+            public void configureWeather(){ensureWeatherPlan();weatherPlan.configure();}
+        });
+        eventCalendar.show(latitude,longitude,place);
+    }
     private void showWeatherPlan(){
         pausePlayback();
         ensureWeatherPlan();
@@ -370,6 +380,7 @@ public class MainActivity extends Activity {
     }
     private void renderVisible(){
         LinearLayout content=page();content.addView(text(getString(R.string.main_render_visible_01),12,accent(),false));title(content,getString(R.string.main_render_visible_02),28);
+        content.addView(pill(getString(R.string.events_title),this::showEventCalendar),spaced());
         content.addView(pill(getString(R.string.main_render_visible_03),this::showWeatherPlan),spaced());
         content.addView(pill(getString(R.string.main_render_visible_04)+favorites.ids().size()+getString(R.string.main_render_visible_05),this::showFavorites),spaced());
         content.addView(pill(getString(R.string.main_render_visible_06)+DeepSkyCatalog.entries().size()+getString(R.string.main_render_visible_05),this::showDeepSkyCatalog),spaced());
