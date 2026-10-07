@@ -18,10 +18,10 @@ git add app/src README.md CHANGELOG.md
 git commit -m "Describe the validated change"
 ```
 
-发布标签 v4.1 保留工程整理版本，v4.2 指向观星体验收尾的验证提交。本地仓库没有配置远程，也没有上传到 GitHub。需要异机备份时，可复制生成的 Git bundle，或配置自己的远程仓库。
+发布标签 v4.1 保留工程整理版本，v4.2 指向观星体验收尾的验证提交。远程 origin 为私有仓库 https://github.com/BSRain/startrail 。4.3 使用 codex/celestial-calendar-43 分支开发，验证后归档 v4.3。需要异机备份时，可复制生成的 Git bundle，或配置自己的远程仓库。
 
 ```powershell
-git clone outputs/startrail-4.2-history.bundle startrail-copy
+git clone outputs/startrail-4.3-history.bundle startrail-copy
 ```
 
 被忽略：Gradle/Android 工具、构建产物、outputs、日志、个人 local.properties、signing.properties、keystore/jks/pem。不要使用 git add -f 绕过密钥排除。原始天气私钥和正式签名密钥均需单独妥善备份。
